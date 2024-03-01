@@ -26,18 +26,24 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun App() {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
-        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             Button(onClick = { showContent = !showContent }) {
                 Text("Click me!")
             }
-            AnimatedVisibility(showContent) {
+            AnimatedVisibility(visible = showContent) {
                 val greeting = remember { Greeting().greet() }
                 Column(
-                    Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+                    Image(
+                        painter = painterResource(resource = Res.drawable.compose_multiplatform),
+                        contentDescription = null,
+                    )
+                    Text(text = "Compose: $greeting")
                 }
             }
         }

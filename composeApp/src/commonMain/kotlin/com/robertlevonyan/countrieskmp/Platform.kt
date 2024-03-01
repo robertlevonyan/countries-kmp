@@ -1,4 +1,4 @@
-
+package com.robertlevonyan.countrieskmp
 interface Platform {
     val name: String
 }

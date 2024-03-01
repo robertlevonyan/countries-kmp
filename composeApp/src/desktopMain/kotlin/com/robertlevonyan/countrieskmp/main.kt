@@ -1,4 +1,5 @@
-import androidx.compose.runtime.Composable
+package com.robertlevonyan.countrieskmp
+
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 

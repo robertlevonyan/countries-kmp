@@ -1,3 +1,5 @@
+package com.robertlevonyan.countrieskmp
+
 import platform.UIKit.UIDevice
 
 class IOSPlatform: Platform {

@@ -1,3 +1,5 @@
+package com.robertlevonyan.countrieskmp
+
 class Greeting {
     private val platform = getPlatform()
 

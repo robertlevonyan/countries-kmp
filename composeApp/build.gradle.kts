@@ -65,6 +65,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.ktor.client.core)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlin.test)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

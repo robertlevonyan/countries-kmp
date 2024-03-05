@@ -12,10 +12,10 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
-import countrieskmp.composeapp.generated.resources.Res
-import countrieskmp.composeapp.generated.resources.app_name
-import countrieskmp.composeapp.generated.resources.dark_mode
-import countrieskmp.composeapp.generated.resources.light_mode
+import countries_kmp.composeapp.generated.resources.Res
+import countries_kmp.composeapp.generated.resources.app_name
+import countries_kmp.composeapp.generated.resources.dark_mode
+import countries_kmp.composeapp.generated.resources.light_mode
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

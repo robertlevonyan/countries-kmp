@@ -4,9 +4,9 @@ package com.robertlevonyan.countrieskmp
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import countrieskmp.composeapp.generated.resources.Res
-import countrieskmp.composeapp.generated.resources.app_name
-import countrieskmp.composeapp.generated.resources.ic_launcher
+import countries_kmp.composeapp.generated.resources.Res
+import countries_kmp.composeapp.generated.resources.app_name
+import countries_kmp.composeapp.generated.resources.ic_launcher
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

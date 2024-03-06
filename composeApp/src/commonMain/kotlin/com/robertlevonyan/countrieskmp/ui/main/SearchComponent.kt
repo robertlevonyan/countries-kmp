@@ -15,10 +15,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import countrieskmp.composeapp.generated.resources.Res
-import countrieskmp.composeapp.generated.resources.ic_close
-import countrieskmp.composeapp.generated.resources.ic_search
-import countrieskmp.composeapp.generated.resources.search_hint
+import countries_kmp.composeapp.generated.resources.Res
+import countries_kmp.composeapp.generated.resources.ic_close
+import countries_kmp.composeapp.generated.resources.ic_search
+import countries_kmp.composeapp.generated.resources.search_hint
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

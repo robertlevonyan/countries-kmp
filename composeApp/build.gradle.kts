@@ -56,6 +56,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.koin.android)
+            implementation(libs.ktor.client.loggingjvm)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -65,6 +66,9 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.client.content.negotiation)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlin.test)
             implementation(libs.kotlin.serialization)
@@ -76,6 +80,7 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.ktor.client.loggingjvm)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

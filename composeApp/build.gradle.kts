@@ -73,6 +73,7 @@ kotlin {
             implementation(libs.kotlin.test)
             implementation(libs.kotlin.serialization)
             implementation(libs.koin.core)
+            implementation(libs.koin.compose)
             implementation(libs.voyager.koin)
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenmodel)

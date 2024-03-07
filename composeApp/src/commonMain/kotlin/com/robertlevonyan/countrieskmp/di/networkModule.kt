@@ -2,7 +2,6 @@ package com.robertlevonyan.countrieskmp.di
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
@@ -20,22 +19,22 @@ val networkModule = module {
     single {
         HttpClient(CIO) {
             engine {
-                this.requestTimeout = 100_000
+                requestTimeout = 100_000
             }
             install(ContentNegotiation) {
                 json(get())
             }
-            expectSuccess = true
-            HttpResponseValidator {
-                handleResponseExceptionWithRequest { exception, request ->
+//            expectSuccess = true
+//            HttpResponseValidator {
+//                handleResponseExceptionWithRequest { exception, request ->
 //                    val clientException =
 //                        exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
 //                    val exceptionResponse = clientException.response
 //                    if (exceptionResponse.status == HttpStatusCode.NotFound) {
 //                        throw A2bException(ExceptionType.API, -1, clientException)
 //                    }
-                }
-            }
+//                }
+//            }
         }
     }
 }

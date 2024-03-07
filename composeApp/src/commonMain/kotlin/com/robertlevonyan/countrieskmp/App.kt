@@ -10,28 +10,36 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.robertlevonyan.countrieskmp.di.appModules
 import com.robertlevonyan.countrieskmp.ui.main.MainScreen
 import com.robertlevonyan.countrieskmp.ui.theme.CountriesTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.KoinApplication
 
 @Composable
 @Preview
 fun App() {
-    val isSystemInDarkTheme = isSystemInDarkTheme()
-    var isDarkTheme by remember { mutableStateOf(isSystemInDarkTheme) }
-    CountriesTheme(
-        darkTheme = isDarkTheme
+    KoinApplication(
+        application = {
+            modules(appModules())
+        }
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        val isSystemInDarkTheme = isSystemInDarkTheme()
+        var isDarkTheme by remember { mutableStateOf(isSystemInDarkTheme) }
+        CountriesTheme(
+            darkTheme = isDarkTheme
         ) {
-            MainScreen(
-                isDarkTheme = isDarkTheme,
-                toggleTheme = {
-                    isDarkTheme = !isDarkTheme
-                }
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                MainScreen(
+                    isDarkTheme = isDarkTheme,
+                    toggleTheme = {
+                        isDarkTheme = !isDarkTheme
+                    }
+                )
+            }
         }
     }
 }

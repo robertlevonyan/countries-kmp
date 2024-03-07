@@ -1,88 +1,96 @@
 package com.robertlevonyan.countrieskmp.entity
 
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Country(
     @SerialName("name")
-    val name: CountryName,
+    val name: CountryName? = null,
     @SerialName("tld")
-    val topLevelDomain: List<String>,
+    @Contextual
+    val topLevelDomain: List<String>? = null,
     @SerialName("ccn3")
-    val cellularNetworkFactor: String,
+    val cellularNetworkFactor: String? = null,
     @SerialName("status")
-    val status: String,
+    val status: String? = null,
     @SerialName("unMember")
-    val unMember: Boolean,
+    val unMember: Boolean? = null,
     @SerialName("currencies")
-    val currencies: Map<String, CountryCurrency>,
+    val currencies: Map<String, CountryCurrency>? = null,
     @SerialName("capital")
-    val capital: List<String>,
+    val capital: List<String>? = null,
     @SerialName("altSpellings")
-    val altSpellings: List<String>,
+    val altSpellings: List<String>? = null,
     @SerialName("region")
-    val region: String,
+    val region: String? = null,
     @SerialName("subregion")
-    val subregion: String,
+    val subregion: String? = null,
     @SerialName("languages")
-    val languages: Map<String, String>,
+    val languages: Map<String, String>? = null,
     @SerialName("translations")
-    val translations: Map<String, CountryName>,
+    val translations: Map<String, CountryName>? = null,
     @SerialName("latlng")
-    val latlng: List<Double>,
+    val latlng: List<Double>? = null,
     @SerialName("landlocked")
-    val landlocked: Boolean,
+    val landlocked: Boolean? = null,
     @SerialName("borders")
-    val borders: List<String>,
+    val borders: List<String>? = null,
     @SerialName("area")
-    val area: Double,
+    val area: Double? = null,
     @SerialName("flag")
-    val flag: String,
+    val flag: String? = null,
     @SerialName("maps")
-    val maps: Map<String, String>,
+    val maps: Map<String, String>? = null,
     @SerialName("population")
-    val population: Long,
+    val population: Long? = null,
     @SerialName("fifa")
-    val fifa: String,
+    val fifa: String? = null,
     @SerialName("timezones")
-    val timezones: List<String>,
+    val timezones: List<String>? = null,
     @SerialName("continents")
-    val continents: List<String>,
+    val continents: List<String>? = null,
     @SerialName("flags")
-    val flags: Map<String, String>,
+    val flags: Map<String, String>? = null,
     @SerialName("coatOfArms")
-    val coatOfArms: Map<String, String>,
+    val coatOfArms: Map<String, String>? = null,
     @SerialName("startOfWeek")
-    val startOfWeek: String,
+    val startOfWeek: String? = null,
     @SerialName("capitalInfo")
-    val capitalInfo: Map<String, Double>,
+    val capitalInfo: CapitalInfo? = null,
     @SerialName("postalCode")
-    val postalCode: Map<String, String>,
+    val postalCode: Map<String, String>? = null,
 )
 
 @Serializable
 data class CountryName(
     @SerialName("common")
-    val common: String,
+    val common: String? = null,
     @SerialName("official")
-    val official: String,
+    val official: String? = null,
     @SerialName("nativeName")
-    val nativeName: Map<String, CountryNativeName>,
+    val nativeName: Map<String, CountryNativeName>? = null,
 )
 
 @Serializable
 data class CountryNativeName(
-    @SerialName("common")
-    val common: String,
     @SerialName("official")
-    val official: String,
+    val official: String? = null,
+    @SerialName("common")
+    val common: String? = null,
 )
 
 @Serializable
 data class CountryCurrency(
     @SerialName("name")
-    val name: String,
+    val name: String? = null,
     @SerialName("symbol")
-    val symbol: String,
+    val symbol: String? = null,
+)
+
+@Serializable
+data class CapitalInfo(
+    @SerialName("latlng")
+    val latlng: List<Double>? = null,
 )

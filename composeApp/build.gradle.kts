@@ -78,6 +78,9 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenmodel)
             implementation(libs.voyager.transitions)
+            implementation(libs.coil)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.ktor)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

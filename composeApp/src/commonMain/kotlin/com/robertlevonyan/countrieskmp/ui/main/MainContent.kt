@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalResourceApi::class)
+
 package com.robertlevonyan.countrieskmp.ui.main
 
 import androidx.compose.foundation.Image
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,10 +23,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.PlatformContext
 import androidx.compose.ui.text.font.FontWeight
 import com.robertlevonyan.countrieskmp.entity.Country
 import com.robertlevonyan.countrieskmp.repository.CountriesRepository
 import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
+import com.robertlevonyan.countrieskmp.ui.theme.ThumbSize
+import countries_kmp.composeapp.generated.resources.Res
+import countries_kmp.composeapp.generated.resources.ic_launcher
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 
@@ -50,27 +59,35 @@ fun MainContent(paddingValues: PaddingValues) {
 
 @Composable
 fun CountryItem(country: Country) {
-    Row(modifier = Modifier.fillMaxWidth().wrapContentHeight().clickable {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .clickable {
 
-    }.padding(HalfPadding)) {
-//        Image(painter = painterResource())
-//        coil3.Image(
-//            modifier = Modifier.padding(FabPadding),
+            }
+            .padding(HalfPadding)
+    ) {
+        Image(
+            modifier = Modifier
+                .size(ThumbSize)
+                .align(Alignment.CenterVertically),
+            painter = painterResource(Res.drawable.ic_launcher),
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
 //            url = country.flag.orEmpty(),
-//        )
         Column(
-            modifier = Modifier.fillMaxWidth().padding(HalfPadding)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(HalfPadding)
                 .align(Alignment.CenterVertically)
         ) {
             Text(
-                modifier = Modifier,
                 text = country.name?.common.orEmpty(),
                 fontWeight = FontWeight.Bold,
             )
-            Text(
-                modifier = Modifier,
-                text = country.capital?.firstOrNull().orEmpty(),
-            )
+            Text(text = country.capital?.firstOrNull().orEmpty())
         }
     }
 }

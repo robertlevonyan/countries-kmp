@@ -4,6 +4,7 @@ package com.robertlevonyan.countrieskmp.ui.main
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
@@ -15,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
 import countries_kmp.composeapp.generated.resources.Res
 import countries_kmp.composeapp.generated.resources.ic_close
 import countries_kmp.composeapp.generated.resources.ic_search
@@ -28,9 +30,11 @@ fun SearchComponent(
     onSearchInputChange: (String) -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
-    Box(modifier = Modifier.fillMaxWidth()) {
+    Box(modifier = Modifier.fillMaxWidth().padding(HalfPadding)) {
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(fraction = 0.9f).align(Alignment.Center),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
             value = searchText,
             onValueChange = {
                 searchText = it

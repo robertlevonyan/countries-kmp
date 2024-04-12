@@ -70,7 +70,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.kotlinx.coroutines.core)
-//            implementation(libs.kotlin.test)
+            implementation(libs.kotlin.test)
             implementation(libs.kotlin.serialization)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
@@ -78,17 +78,18 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenmodel)
             implementation(libs.voyager.transitions)
-//            implementation(libs.coil)
-//            implementation(libs.coil.compose)
-//            implementation(libs.coil.ktor)
+            implementation(libs.coil)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.ktor)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.ktor.client.loggingjvm)
+            implementation(libs.kotlinx.coroutines.swing)
         }
-//        iosMain.dependencies {
-//            implementation(libs.ktor.client.darwin)
-//        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
     }
 }
 
@@ -135,15 +136,6 @@ compose.desktop {
             packageName = "com.robertlevon.countrieskmp"
             packageVersion = "1.0.0"
         }
-//        configurations {
-//            this.addAll(
-//                mutableListOf(
-////                runtimeClasspath,
-//                    project.configurations["desktopCompileClasspath"],
-//                    project.configurations["desktopRuntimeClasspath"],
-//                )
-//            )
-//        }
     }
 }
 

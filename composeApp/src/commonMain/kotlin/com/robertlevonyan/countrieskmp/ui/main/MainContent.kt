@@ -23,12 +23,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.PlatformContext
 import androidx.compose.ui.text.font.FontWeight
+import coil3.compose.AsyncImage
 import com.robertlevonyan.countrieskmp.entity.Country
 import com.robertlevonyan.countrieskmp.repository.CountriesRepository
 import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
+import com.robertlevonyan.countrieskmp.ui.theme.RoundedRectShape
 import com.robertlevonyan.countrieskmp.ui.theme.ThumbSize
 import countries_kmp.composeapp.generated.resources.Res
 import countries_kmp.composeapp.generated.resources.ic_launcher
@@ -68,15 +71,16 @@ fun CountryItem(country: Country) {
             }
             .padding(HalfPadding)
     ) {
-        Image(
+        AsyncImage(
             modifier = Modifier
                 .size(ThumbSize)
+                .clip(RoundedRectShape)
                 .align(Alignment.CenterVertically),
-            painter = painterResource(Res.drawable.ic_launcher),
             contentDescription = null,
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            model = country.flags?.getOrElse("png") {""},
+            clipToBounds = true,
         )
-//            url = country.flag.orEmpty(),
         Column(
             modifier = Modifier
                 .fillMaxWidth()

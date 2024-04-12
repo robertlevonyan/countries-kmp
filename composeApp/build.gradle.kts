@@ -81,6 +81,7 @@ kotlin {
             implementation(libs.coil)
             implementation(libs.coil.compose)
             implementation(libs.coil.ktor)
+            implementation(libs.lottie)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

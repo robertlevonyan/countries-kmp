@@ -2,6 +2,9 @@
 
 package com.robertlevonyan.countrieskmp.ui.main
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,9 +35,15 @@ import androidx.compose.ui.text.font.FontWeight
 import coil3.compose.AsyncImage
 import com.robertlevonyan.countrieskmp.entity.Country
 import com.robertlevonyan.countrieskmp.repository.CountriesRepository
+import com.robertlevonyan.countrieskmp.ui.lottie.lottieLoadingAnimation
 import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
 import com.robertlevonyan.countrieskmp.ui.theme.RoundedRectShape
 import com.robertlevonyan.countrieskmp.ui.theme.ThumbSize
+import io.github.alexzhirkevich.compottie.LottieAnimation
+import io.github.alexzhirkevich.compottie.LottieCompositionSpec
+import io.github.alexzhirkevich.compottie.LottieConstants
+import io.github.alexzhirkevich.compottie.rememberLottieComposition
+import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
 
 @Composable
@@ -45,10 +54,47 @@ fun MainContent(
     val countriesRepository: CountriesRepository = koinInject()
     var countries by remember { mutableStateOf(emptyMap<String, List<Country>>()) }
     LaunchedEffect(true) {
+        delay(2000)
         countries = countriesRepository.getCountries()
     }
 
+    AnimatedVisibility(
+        visible = countries.isEmpty(),
+        enter = fadeIn(),
+        exit = fadeOut(),
+    ) {
+        LoadingContent()
+    }
+    AnimatedVisibility(
+        visible = countries.isNotEmpty(),
+        enter = fadeIn(),
+        exit = fadeOut(),
+    ) {
+        CountriesContent(paddingValues, isDarkTheme, countries)
+    }
+}
+
+@Composable
+fun LoadingContent() {
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.JsonString(jsonString = lottieLoadingAnimation)
+    )
+
+    LottieAnimation(
+        modifier = Modifier.fillMaxSize(),
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+    )
+}
+
+@Composable
+fun CountriesContent(
+    paddingValues: PaddingValues,
+    isDarkTheme: Boolean,
+    countries: Map<String, List<Country>>
+) {
     var searchText by remember { mutableStateOf("") }
+
     LazyColumn(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
         item {
             SearchComponent(isDarkTheme) { changedSearchText ->

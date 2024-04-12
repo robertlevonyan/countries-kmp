@@ -35,9 +35,7 @@ fun App() {
             ) {
                 MainScreen(
                     isDarkTheme = isDarkTheme,
-                    toggleTheme = {
-                        isDarkTheme = !isDarkTheme
-                    }
+                    toggleTheme = { isDark -> isDarkTheme = isDark }
                 )
             }
         }

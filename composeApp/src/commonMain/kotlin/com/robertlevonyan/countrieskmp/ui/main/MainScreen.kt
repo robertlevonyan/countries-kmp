@@ -35,7 +35,10 @@ fun MainScreen(
             )
         },
         content = { paddingValues ->
-            MainContent(paddingValues = paddingValues)
+            MainContent(
+                paddingValues = paddingValues,
+                isDarkTheme = isDarkTheme,
+            )
         }
     )
 }

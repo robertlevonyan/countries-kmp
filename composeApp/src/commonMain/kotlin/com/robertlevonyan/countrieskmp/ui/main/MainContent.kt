@@ -1,9 +1,11 @@
-@file:OptIn(ExperimentalResourceApi::class)
+@file:OptIn(ExperimentalFoundationApi::class)
 
 package com.robertlevonyan.countrieskmp.ui.main
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.PlatformContext
 import androidx.compose.ui.text.font.FontWeight
 import coil3.compose.AsyncImage
 import com.robertlevonyan.countrieskmp.entity.Country
@@ -33,16 +35,15 @@ import com.robertlevonyan.countrieskmp.repository.CountriesRepository
 import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
 import com.robertlevonyan.countrieskmp.ui.theme.RoundedRectShape
 import com.robertlevonyan.countrieskmp.ui.theme.ThumbSize
-import countries_kmp.composeapp.generated.resources.Res
-import countries_kmp.composeapp.generated.resources.ic_launcher
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 
 @Composable
-fun MainContent(paddingValues: PaddingValues) {
+fun MainContent(
+    paddingValues: PaddingValues,
+    isDarkTheme: Boolean,
+) {
     val countriesRepository: CountriesRepository = koinInject()
-    var countries by remember { mutableStateOf(emptyList<Country>()) }
+    var countries by remember { mutableStateOf(emptyMap<String, List<Country>>()) }
     LaunchedEffect(true) {
         countries = countriesRepository.getCountries()
     }
@@ -50,12 +51,27 @@ fun MainContent(paddingValues: PaddingValues) {
     var searchText by remember { mutableStateOf("") }
     LazyColumn(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
         item {
-            SearchComponent { changedSearchText ->
+            SearchComponent(isDarkTheme) { changedSearchText ->
                 searchText = changedSearchText
             }
         }
-        items(countries) { country: Country ->
-            CountryItem(country)
+        countries.forEach { (letter, countries) ->
+            stickyHeader {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colors.background)
+                        .padding(HalfPadding)
+                ) {
+                    Text(
+                        text = letter,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+            }
+            items(countries) { country: Country ->
+                CountryItem(country)
+            }
         }
     }
 }
@@ -78,7 +94,7 @@ fun CountryItem(country: Country) {
                 .align(Alignment.CenterVertically),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            model = country.flags?.getOrElse("png") {""},
+            model = country.flags?.getOrElse("png") { "" },
             clipToBounds = true,
         )
         Column(

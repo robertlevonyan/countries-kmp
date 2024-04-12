@@ -9,15 +9,13 @@ import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 import io.ktor.http.path
 import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.MapSerializer
-import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 
 class CountriesRepositoryImpl(
     private val httpClient: HttpClient,
     private val json: Json,
 ) : CountriesRepository {
-    override suspend fun getCountries(): List<Country> = try {
+    override suspend fun getCountries(): Map<String, List<Country>> = try {
         val httpResponse = httpClient.get {
             url {
                 protocol = URLProtocol.HTTPS
@@ -26,12 +24,17 @@ class CountriesRepositoryImpl(
                 contentType(ContentType.Application.Json)
             }
         }
-        httpResponse.body<String?>()?.let { jsonString ->
+        val countries = httpResponse.body<String?>()?.let { jsonString ->
             println(jsonString)
             json.decodeFromString(ListSerializer(Country.serializer()), jsonString)
         } ?: emptyList()
+
+        countries
+            .asSequence()
+            .sortedBy { it.name?.common }
+            .groupBy { it.name?.common?.first().toString() }
     } catch (e: Exception) {
         println("C $e")
-        emptyList()
+        emptyMap()
     }
 }

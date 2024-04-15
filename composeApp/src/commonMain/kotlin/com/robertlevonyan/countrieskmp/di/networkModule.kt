@@ -24,17 +24,6 @@ val networkModule = module {
             install(ContentNegotiation) {
                 json(get())
             }
-//            expectSuccess = true
-//            HttpResponseValidator {
-//                handleResponseExceptionWithRequest { exception, request ->
-//                    val clientException =
-//                        exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
-//                    val exceptionResponse = clientException.response
-//                    if (exceptionResponse.status == HttpStatusCode.NotFound) {
-//                        throw A2bException(ExceptionType.API, -1, clientException)
-//                    }
-//                }
-//            }
         }
     }
 }

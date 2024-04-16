@@ -18,6 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -32,6 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.robertlevonyan.countrieskmp.entity.Country
 import com.robertlevonyan.countrieskmp.repository.CountriesRepository
@@ -39,6 +44,8 @@ import com.robertlevonyan.countrieskmp.ui.lottie.lottieLoadingAnimation
 import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
 import com.robertlevonyan.countrieskmp.ui.theme.RoundedRectShape
 import com.robertlevonyan.countrieskmp.ui.theme.ThumbSize
+import com.robertlevonyan.countrieskmp.ui.util.header
+import com.robertlevonyan.countrieskmp.ui.util.isTablet
 import io.github.alexzhirkevich.compottie.LottieAnimation
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.LottieConstants
@@ -70,7 +77,11 @@ fun MainContent(
         enter = fadeIn(),
         exit = fadeOut(),
     ) {
-        CountriesContent(paddingValues, isDarkTheme, countries)
+        if (isTablet()) {
+            CountriesGridContent(paddingValues, isDarkTheme, countries)
+        } else {
+            CountriesListContent(paddingValues, isDarkTheme, countries)
+        }
     }
 }
 
@@ -88,7 +99,79 @@ fun LoadingContent() {
 }
 
 @Composable
-fun CountriesContent(
+fun CountriesGridContent(
+    paddingValues: PaddingValues,
+    isDarkTheme: Boolean,
+    countries: Map<String, List<Country>>,
+) {
+    var searchText by remember { mutableStateOf("") }
+
+    Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
+        SearchComponent(isDarkTheme) { changedSearchText ->
+            searchText = changedSearchText
+        }
+
+        LazyVerticalGrid(columns = GridCells.Adaptive(200.dp)) {
+            countries.forEach { (letter, countries) ->
+                header {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colors.background)
+                            .padding(HalfPadding)
+                    ) {
+                        Text(
+                            text = letter,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+                items(countries) { country: Country ->
+                    CountryGridItem(country)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CountryGridItem(country: Country) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .clip(RoundedRectShape)
+            .clickable {
+
+            }
+            .padding(HalfPadding)
+    ) {
+        AsyncImage(
+            modifier = Modifier
+                .size(ThumbSize)
+                .clip(RoundedRectShape)
+                .align(Alignment.CenterHorizontally),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            model = country.flags?.getOrElse("png") { "" },
+            clipToBounds = true,
+        )
+        Text(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            text = country.name?.common.orEmpty(),
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            text = country.capital?.firstOrNull().orEmpty(),
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Composable
+fun CountriesListContent(
     paddingValues: PaddingValues,
     isDarkTheme: Boolean,
     countries: Map<String, List<Country>>
@@ -116,18 +199,19 @@ fun CountriesContent(
                 }
             }
             items(countries) { country: Country ->
-                CountryItem(country)
+                CountryListItem(country)
             }
         }
     }
 }
 
 @Composable
-fun CountryItem(country: Country) {
+fun CountryListItem(country: Country) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .clip(RoundedRectShape)
             .clickable {
 
             }

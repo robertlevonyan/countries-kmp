@@ -82,6 +82,7 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.coil.ktor)
             implementation(libs.lottie)
+            implementation(libs.material3.windowsizeclass)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

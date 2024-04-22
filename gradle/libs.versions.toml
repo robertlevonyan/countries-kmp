@@ -3,29 +3,32 @@ agp = "8.3.2"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
-androidx-activityCompose = "1.8.2"
+androidx-activityCompose = "1.9.0"
 androidx-appcompat = "1.6.1"
 androidx-constraintlayout = "2.1.4"
-androidx-core-ktx = "1.12.0"
+androidx-core-ktx = "1.13.0"
 androidx-espresso-core = "3.5.1"
 androidx-material = "1.11.0"
 androidx-test-junit = "1.1.5"
-compose = "1.6.4"
+compose = "1.6.6"
 compose-m3 = "1.2.0"
-compose-plugin = "1.6.0"
+compose-plugin = "1.6.2"
 junit = "4.13.2"
-kotlin = "1.9.22"
+kodeinDiFrameworkCompose = "7.21.2"
+kodeinDi = "7.21.2"
+kotlin = "1.9.23"
 ktor-eap = "3.0.0-eap-852"
-ktor = "2.3.8"
+ktor = "2.3.10"
 material3WindowSizeClassMultiplatform = "0.5.0"
-serialization = "1.6.0"
+serialization = "1.6.3"
 coroutines = "1.8.0"
-koin = "3.6.0-wasm-alpha2"
 voyager = "1.0.0"
 coil = "3.0.0-alpha06"
 lottie = "1.1.2"
 
 [libraries]
+kodein-di-compose = { module = "org.kodein.di:kodein-di-framework-compose", version.ref = "kodeinDiFrameworkCompose" }
+kodein-di = { module = "org.kodein.di:kodein-di", version.ref = "kodeinDi" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -53,10 +56,6 @@ voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.
 voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
-koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
-koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
-koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }

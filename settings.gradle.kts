@@ -2,6 +2,7 @@
 
 rootProject.name = "countries-kmp"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+//enableFeaturePreview("GRADLE_METADATA")
 
 pluginManagement {
     repositories {

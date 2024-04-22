@@ -51,19 +51,23 @@ import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.LottieConstants
 import io.github.alexzhirkevich.compottie.rememberLottieComposition
 import kotlinx.coroutines.delay
-import org.koin.compose.koinInject
+import org.kodein.di.compose.localDI
+import org.kodein.di.instance
 
 @Composable
 fun MainContent(
     paddingValues: PaddingValues,
     isDarkTheme: Boolean,
 ) {
-    val countriesRepository: CountriesRepository = koinInject()
+    val di = localDI()
+    val countriesRepository: CountriesRepository by di.instance()
     var countries by remember { mutableStateOf(emptyMap<String, List<Country>>()) }
     LaunchedEffect(true) {
         delay(2000)
         countries = countriesRepository.getCountries()
     }
+
+    println(countries)
 
     AnimatedVisibility(
         visible = countries.isEmpty(),

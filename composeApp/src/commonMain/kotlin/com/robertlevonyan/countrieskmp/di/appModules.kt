@@ -1,11 +1,5 @@
 package com.robertlevonyan.countrieskmp.di
 
-import org.koin.core.context.startKoin
+import org.kodein.di.DI
 
-fun appModules() = listOf(networkModule, repositoryModule)
-
-fun initKoin(){
-    startKoin {
-        modules(appModules())
-    }
-}
+fun getDi() = DI.from(listOf(networkModule, repositoryModule))

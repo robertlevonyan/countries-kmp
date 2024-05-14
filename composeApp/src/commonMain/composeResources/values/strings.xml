@@ -1,4 +1,17 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">Countries-KMP</string>
     <string name="search_hint">Search countries</string>
+
+    <string name="country_name">Country name</string>
+    <string name="country_name_official">Official name: %1$s</string>
+    <string name="country_name_common">Common name: %1$s</string>
+    <string name="country_name_native">Native name: %1$s</string>
+
+    <string name="country_currency">Currency</string>
+    <string name="country_capital">Capital</string>
+    <string name="country_region">Region</string>
+    <string name="country_languages">Languages</string>
+    <string name="country_area">Area</string>
+    <string name="country_population">Population</string>
+    <string name="country_postal_code">Postal Code</string>
 </resources>

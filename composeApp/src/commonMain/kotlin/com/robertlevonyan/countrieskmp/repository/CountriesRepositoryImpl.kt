@@ -28,7 +28,6 @@ class CountriesRepositoryImpl(
             println(jsonString)
             json.decodeFromString(ListSerializer(Country.serializer()), jsonString)
         } ?: emptyList()
-        println("CCC $countries")
 
         countries
             .asSequence()

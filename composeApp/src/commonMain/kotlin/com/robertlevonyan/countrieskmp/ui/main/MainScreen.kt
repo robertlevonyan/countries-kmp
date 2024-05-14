@@ -12,6 +12,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import com.robertlevonyan.countrieskmp.entity.Country
 import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
 import countries_kmp.composeapp.generated.resources.Res
 import countries_kmp.composeapp.generated.resources.app_name
@@ -27,6 +29,8 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     isDarkTheme: Boolean,
     toggleTheme: (Boolean) -> Unit = {},
+    navController: NavController,
+    onCountryClick: (Country) -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
@@ -40,6 +44,8 @@ fun MainScreen(
             MainContent(
                 paddingValues = paddingValues,
                 isDarkTheme = isDarkTheme,
+                navController = navController,
+                onCountryClick = onCountryClick,
             )
         }
     )

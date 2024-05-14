@@ -37,9 +37,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.robertlevonyan.countrieskmp.entity.Country
 import com.robertlevonyan.countrieskmp.repository.CountriesRepository
+import com.robertlevonyan.countrieskmp.ui.NavigationScreens
 import com.robertlevonyan.countrieskmp.ui.lottie.lottieLoadingAnimation
 import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
 import com.robertlevonyan.countrieskmp.ui.theme.RoundedRectShape
@@ -50,7 +52,7 @@ import io.github.alexzhirkevich.compottie.LottieAnimation
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.LottieConstants
 import io.github.alexzhirkevich.compottie.rememberLottieComposition
-import kotlinx.coroutines.delay
+import kotlinx.serialization.json.Json
 import org.kodein.di.compose.localDI
 import org.kodein.di.instance
 
@@ -58,16 +60,17 @@ import org.kodein.di.instance
 fun MainContent(
     paddingValues: PaddingValues,
     isDarkTheme: Boolean,
+    navController: NavController,
+    onCountryClick: (Country) -> Unit = {},
 ) {
     val di = localDI()
     val countriesRepository: CountriesRepository by di.instance()
+    val json: Json by di.instance()
+
     var countries by remember { mutableStateOf(emptyMap<String, List<Country>>()) }
     LaunchedEffect(true) {
-        delay(2000)
         countries = countriesRepository.getCountries()
     }
-
-    println(countries)
 
     AnimatedVisibility(
         visible = countries.isEmpty(),
@@ -82,9 +85,15 @@ fun MainContent(
         exit = fadeOut(),
     ) {
         if (isTablet()) {
-            CountriesGridContent(paddingValues, isDarkTheme, countries)
+            CountriesGridContent(paddingValues, isDarkTheme, countries) { country ->
+                onCountryClick(country)
+                navController.navigate(route = NavigationScreens.Details.name)
+            }
         } else {
-            CountriesListContent(paddingValues, isDarkTheme, countries)
+            CountriesListContent(paddingValues, isDarkTheme, countries) { country ->
+                onCountryClick(country)
+                navController.navigate(route = NavigationScreens.Details.name)
+            }
         }
     }
 }
@@ -107,6 +116,7 @@ fun CountriesGridContent(
     paddingValues: PaddingValues,
     isDarkTheme: Boolean,
     countries: Map<String, List<Country>>,
+    onCountryClick: (Country) -> Unit,
 ) {
     var searchText by remember { mutableStateOf("") }
 
@@ -131,7 +141,7 @@ fun CountriesGridContent(
                     }
                 }
                 items(countries) { country: Country ->
-                    CountryGridItem(country)
+                    CountryGridItem(country, onCountryClick)
                 }
             }
         }
@@ -139,15 +149,16 @@ fun CountriesGridContent(
 }
 
 @Composable
-fun CountryGridItem(country: Country) {
+fun CountryGridItem(
+    country: Country,
+    onCountryClick: (Country) -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .clip(RoundedRectShape)
-            .clickable {
-
-            }
+            .clickable { onCountryClick(country) }
             .padding(HalfPadding)
     ) {
         AsyncImage(
@@ -178,7 +189,8 @@ fun CountryGridItem(country: Country) {
 fun CountriesListContent(
     paddingValues: PaddingValues,
     isDarkTheme: Boolean,
-    countries: Map<String, List<Country>>
+    countries: Map<String, List<Country>>,
+    onCountryClick: (Country) -> Unit,
 ) {
     var searchText by remember { mutableStateOf("") }
 
@@ -203,22 +215,23 @@ fun CountriesListContent(
                 }
             }
             items(countries) { country: Country ->
-                CountryListItem(country)
+                CountryListItem(country, onCountryClick)
             }
         }
     }
 }
 
 @Composable
-fun CountryListItem(country: Country) {
+fun CountryListItem(
+    country: Country,
+    onCountryClick: (Country) -> Unit,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .clip(RoundedRectShape)
-            .clickable {
-
-            }
+            .clickable { onCountryClick(country) }
             .padding(HalfPadding)
     ) {
         AsyncImage(

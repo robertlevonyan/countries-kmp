@@ -12,26 +12,26 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation.NavController
 import com.robertlevonyan.countrieskmp.entity.Country
 import com.robertlevonyan.countrieskmp.ui.theme.DoublePadding
-import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
 import countries_kmp.composeapp.generated.resources.Res
 import countries_kmp.composeapp.generated.resources.ic_close
+import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun DetailsScreen(
     country: Country?,
-    onBack: () -> Unit
+    navigator: Navigator,
+//    onBack: () -> Unit
 ) {
 
     Scaffold(
         modifier = Modifier,
         topBar = {
             Toolbar(countryName = "${country?.flag.orEmpty()} ${country?.name?.official.orEmpty()}") {
-                onBack()
+                navigator.popBackStack()
             }
         },
         content = { paddingValues ->

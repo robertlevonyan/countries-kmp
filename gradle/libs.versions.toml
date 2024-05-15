@@ -4,41 +4,25 @@ android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
 androidx-activityCompose = "1.9.0"
-androidx-appcompat = "1.6.1"
-androidx-constraintlayout = "2.1.4"
-androidx-core-ktx = "1.13.1"
-androidx-espresso-core = "3.5.1"
-androidx-material = "1.12.0"
-androidx-test-junit = "1.1.5"
 compose = "1.6.7"
-compose-m3 = "1.2.0"
 compose-plugin = "1.6.2"
-junit = "4.13.2"
-kodeinDiFrameworkCompose = "7.21.2"
-kodeinDi = "7.21.2"
+koinCore = "3.6.0-wasm-alpha2"
+koinTest = "3.2.0"
 kotlin = "1.9.23"
-ktor-eap = "3.0.0-eap-852"
 ktor = "2.3.10"
 material3WindowSizeClassMultiplatform = "0.5.0"
-navigationCompose = "2.7.0-alpha03"
+precompose = "1.6.0"
 serialization = "1.6.3"
 coroutines = "1.8.0"
-voyager = "1.0.0"
 coil = "3.0.0-alpha06"
 lottie = "1.1.2"
 
 [libraries]
-kodein-di-compose = { module = "org.kodein.di:kodein-di-framework-compose", version.ref = "kodeinDiFrameworkCompose" }
-kodein-di = { module = "org.kodein.di:kodein-di", version.ref = "kodeinDi" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinCore" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinCore" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koinTest" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
-kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
-androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-espresso-core" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
-androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
@@ -53,11 +37,9 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
 material3-windowsizeclass = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "material3WindowSizeClassMultiplatform" }
-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
-voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
-voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
-voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
-voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
+precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
+precompose-viewmodel = { module = "moe.tlaster:precompose-viewmodel", version.ref = "precompose" }
+precompose-koin = { module = "moe.tlaster:precompose-koin", version.ref = "precompose" }
 kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }

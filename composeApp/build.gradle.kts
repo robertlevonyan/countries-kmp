@@ -56,6 +56,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.loggingjvm)
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -71,18 +72,17 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlin.test)
             implementation(libs.kotlin.serialization)
-//            implementation(libs.voyager.koin)
-//            implementation(libs.voyager.navigator)
-//            implementation(libs.voyager.screenmodel)
-//            implementation(libs.voyager.transitions)
             implementation(libs.coil)
             implementation(libs.coil.compose)
             implementation(libs.coil.ktor)
             implementation(libs.lottie)
             implementation(libs.material3.windowsizeclass)
-            implementation(libs.kodein.di)
-            implementation(libs.kodein.di.compose)
-            implementation(libs.navigation.compose)
+            implementation(libs.precompose)
+            implementation(libs.precompose.viewmodel)
+            implementation(libs.precompose.koin)
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.test)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

@@ -2,15 +2,14 @@ package com.robertlevonyan.countrieskmp.di
 
 import com.robertlevonyan.countrieskmp.repository.CountriesRepository
 import com.robertlevonyan.countrieskmp.repository.CountriesRepositoryImpl
-import org.kodein.di.DI
-import org.kodein.di.bindSingleton
-import org.kodein.di.instance
+import org.koin.dsl.module
 
-val repositoryModule = DI.Module("repositoryModule") {
-    bindSingleton<CountriesRepository> {
+//val repositoryModule = DI.Module("repositoryModule") {
+val repositoryModule = module {
+    single<CountriesRepository> {
         CountriesRepositoryImpl(
-            httpClient = instance(),
-            json = instance(),
+            httpClient = get(),
+            json = get(),
         )
     }
 }

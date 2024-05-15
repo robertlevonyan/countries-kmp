@@ -25,7 +25,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,10 +37,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.robertlevonyan.countrieskmp.entity.Country
-import com.robertlevonyan.countrieskmp.repository.CountriesRepository
 import com.robertlevonyan.countrieskmp.ui.NavigationScreens
 import com.robertlevonyan.countrieskmp.ui.lottie.lottieLoadingAnimation
 import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
@@ -53,24 +51,19 @@ import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.LottieConstants
 import io.github.alexzhirkevich.compottie.rememberLottieComposition
 import kotlinx.serialization.json.Json
-import org.kodein.di.compose.localDI
-import org.kodein.di.instance
+import moe.tlaster.precompose.koin.koinViewModel
+import moe.tlaster.precompose.navigation.Navigator
+import org.koin.compose.koinInject
 
 @Composable
 fun MainContent(
     paddingValues: PaddingValues,
     isDarkTheme: Boolean,
-    navController: NavController,
-    onCountryClick: (Country) -> Unit = {},
+    navigator: Navigator,
+    json: Json = koinInject(),
 ) {
-    val di = localDI()
-    val countriesRepository: CountriesRepository by di.instance()
-    val json: Json by di.instance()
-
-    var countries by remember { mutableStateOf(emptyMap<String, List<Country>>()) }
-    LaunchedEffect(true) {
-        countries = countriesRepository.getCountries()
-    }
+    val viewModel = koinViewModel(vmClass = MainViewModel::class)
+    val countries by viewModel.countries.collectAsState()
 
     AnimatedVisibility(
         visible = countries.isEmpty(),
@@ -86,20 +79,20 @@ fun MainContent(
     ) {
         if (isTablet()) {
             CountriesGridContent(paddingValues, isDarkTheme, countries) { country ->
-                onCountryClick(country)
-                navController.navigate(route = NavigationScreens.Details.name)
+                val countryJson = json.encodeToString(Country.serializer(), country)
+                navigator.navigate(route = "${NavigationScreens.Details.name}?country=$countryJson")
             }
         } else {
             CountriesListContent(paddingValues, isDarkTheme, countries) { country ->
-                onCountryClick(country)
-                navController.navigate(route = NavigationScreens.Details.name)
+                val countryJson = json.encodeToString(Country.serializer(), country)
+                navigator.navigate(route = "${NavigationScreens.Details.name}?country=$countryJson")
             }
         }
     }
 }
 
 @Composable
-fun LoadingContent() {
+private fun LoadingContent() {
     val composition by rememberLottieComposition(
         LottieCompositionSpec.JsonString(jsonString = lottieLoadingAnimation)
     )
@@ -112,7 +105,7 @@ fun LoadingContent() {
 }
 
 @Composable
-fun CountriesGridContent(
+private fun CountriesGridContent(
     paddingValues: PaddingValues,
     isDarkTheme: Boolean,
     countries: Map<String, List<Country>>,
@@ -149,7 +142,7 @@ fun CountriesGridContent(
 }
 
 @Composable
-fun CountryGridItem(
+private fun CountryGridItem(
     country: Country,
     onCountryClick: (Country) -> Unit,
 ) {
@@ -186,7 +179,7 @@ fun CountryGridItem(
 }
 
 @Composable
-fun CountriesListContent(
+private fun CountriesListContent(
     paddingValues: PaddingValues,
     isDarkTheme: Boolean,
     countries: Map<String, List<Country>>,
@@ -222,7 +215,7 @@ fun CountriesListContent(
 }
 
 @Composable
-fun CountryListItem(
+private fun CountryListItem(
     country: Country,
     onCountryClick: (Country) -> Unit,
 ) {

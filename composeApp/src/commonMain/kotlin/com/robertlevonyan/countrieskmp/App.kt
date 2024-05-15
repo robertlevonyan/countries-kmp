@@ -20,13 +20,8 @@ import org.koin.compose.KoinApplication
 @Composable
 @Preview
 fun App() {
-    KoinApplication(
-        application = {
-            modules(getDiModules())
-        }
-    ) {
+    KoinApplication(application = { modules(getDiModules()) }) {
         PreComposeApp {
-//        withDI(getDi()) {
             val isSystemInDarkTheme = isSystemInDarkTheme()
             var isDarkTheme by remember { mutableStateOf(isSystemInDarkTheme) }
             CountriesTheme(darkTheme = isDarkTheme) {
@@ -40,7 +35,6 @@ fun App() {
                     )
                 }
             }
-//        }
         }
     }
 }

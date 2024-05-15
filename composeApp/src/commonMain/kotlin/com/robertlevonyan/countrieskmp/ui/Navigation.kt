@@ -6,13 +6,10 @@ import com.robertlevonyan.countrieskmp.ui.details.DetailsScreen
 import com.robertlevonyan.countrieskmp.ui.main.MainScreen
 import kotlinx.serialization.json.Json
 import moe.tlaster.precompose.navigation.NavHost
-import moe.tlaster.precompose.navigation.path
 import moe.tlaster.precompose.navigation.query
 import moe.tlaster.precompose.navigation.rememberNavigator
 import moe.tlaster.precompose.navigation.transition.NavTransition
 import org.koin.compose.koinInject
-
-//const val COUNTRY_ARG = "country"
 
 @Composable
 fun Navigation(

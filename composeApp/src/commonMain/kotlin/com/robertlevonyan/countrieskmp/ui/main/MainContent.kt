@@ -33,15 +33,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.robertlevonyan.countrieskmp.entity.Country
+import com.robertlevonyan.countrieskmp.ui.ARG_COUNTRY
 import com.robertlevonyan.countrieskmp.ui.NavigationScreens
 import com.robertlevonyan.countrieskmp.ui.lottie.lottieLoadingAnimation
 import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
+import com.robertlevonyan.countrieskmp.ui.theme.PurpleGrey40
+import com.robertlevonyan.countrieskmp.ui.theme.PurpleGrey80
 import com.robertlevonyan.countrieskmp.ui.theme.RoundedRectShape
 import com.robertlevonyan.countrieskmp.ui.theme.ThumbSize
 import com.robertlevonyan.countrieskmp.ui.util.header
@@ -77,15 +81,16 @@ fun MainContent(
         enter = fadeIn(),
         exit = fadeOut(),
     ) {
+        val searchBackgroundColor = if (isDarkTheme) PurpleGrey40 else PurpleGrey80
         if (isTablet()) {
-            CountriesGridContent(paddingValues, isDarkTheme, countries) { country ->
+            CountriesGridContent(paddingValues, searchBackgroundColor, countries) { country ->
                 val countryJson = json.encodeToString(Country.serializer(), country)
-                navigator.navigate(route = "${NavigationScreens.Details.name}?country=$countryJson")
+                navigator.navigate(route = "${NavigationScreens.Details.name}?$ARG_COUNTRY=$countryJson")
             }
         } else {
-            CountriesListContent(paddingValues, isDarkTheme, countries) { country ->
+            CountriesListContent(paddingValues, searchBackgroundColor, countries) { country ->
                 val countryJson = json.encodeToString(Country.serializer(), country)
-                navigator.navigate(route = "${NavigationScreens.Details.name}?country=$countryJson")
+                navigator.navigate(route = "${NavigationScreens.Details.name}?$ARG_COUNTRY=$countryJson")
             }
         }
     }
@@ -107,14 +112,14 @@ private fun LoadingContent() {
 @Composable
 private fun CountriesGridContent(
     paddingValues: PaddingValues,
-    isDarkTheme: Boolean,
+    searchBackgroundColor: Color,
     countries: Map<String, List<Country>>,
     onCountryClick: (Country) -> Unit,
 ) {
     var searchText by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-        SearchComponent(isDarkTheme) { changedSearchText ->
+        SearchComponent(searchBackgroundColor) { changedSearchText ->
             searchText = changedSearchText
         }
 
@@ -181,7 +186,7 @@ private fun CountryGridItem(
 @Composable
 private fun CountriesListContent(
     paddingValues: PaddingValues,
-    isDarkTheme: Boolean,
+    searchBackgroundColor: Color,
     countries: Map<String, List<Country>>,
     onCountryClick: (Country) -> Unit,
 ) {
@@ -189,7 +194,7 @@ private fun CountriesListContent(
 
     LazyColumn(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
         item {
-            SearchComponent(isDarkTheme) { changedSearchText ->
+            SearchComponent(searchBackgroundColor) { changedSearchText ->
                 searchText = changedSearchText
             }
         }

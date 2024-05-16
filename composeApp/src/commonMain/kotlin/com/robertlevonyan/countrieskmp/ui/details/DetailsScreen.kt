@@ -24,7 +24,6 @@ import org.jetbrains.compose.resources.painterResource
 fun DetailsScreen(
     country: Country?,
     navigator: Navigator,
-//    onBack: () -> Unit
 ) {
 
     Scaffold(

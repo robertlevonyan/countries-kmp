@@ -1,5 +1,6 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -9,7 +10,7 @@ plugins {
 }
 
 kotlin {
-    @OptIn(ExperimentalWasmDsl::class)
+//    @OptIn(ExperimentalWasmDsl::class)
 //    wasmJs {
 //        moduleName = "composeApp"
 //        browser {
@@ -83,6 +84,8 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.test)
+            implementation(libs.stately.common)
+            implementation(libs.stately.concurrent.collections)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

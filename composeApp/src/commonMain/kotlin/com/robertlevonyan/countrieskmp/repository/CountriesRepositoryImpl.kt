@@ -25,7 +25,6 @@ class CountriesRepositoryImpl(
             }
         }
         val countries = httpResponse.body<String?>()?.let { jsonString ->
-            println(jsonString)
             json.decodeFromString(ListSerializer(Country.serializer()), jsonString)
         } ?: emptyList()
 
@@ -34,7 +33,6 @@ class CountriesRepositoryImpl(
             .sortedBy { it.name?.common }
             .groupBy { it.name?.common?.first().toString() }
     } catch (e: Exception) {
-        println("C $e")
         emptyMap()
     }
 }

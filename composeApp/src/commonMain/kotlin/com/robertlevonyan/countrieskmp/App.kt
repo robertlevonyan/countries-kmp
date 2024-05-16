@@ -20,18 +20,19 @@ import org.koin.compose.KoinApplication
 @Composable
 @Preview
 fun App() {
+    val isSystemInDarkTheme = isSystemInDarkTheme()
+    val isDarkTheme = remember { mutableStateOf(isSystemInDarkTheme) }
+
     KoinApplication(application = { modules(getDiModules()) }) {
         PreComposeApp {
-            val isSystemInDarkTheme = isSystemInDarkTheme()
-            var isDarkTheme by remember { mutableStateOf(isSystemInDarkTheme) }
-            CountriesTheme(darkTheme = isDarkTheme) {
+            CountriesTheme(darkTheme = isDarkTheme.value) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Navigation(
                         isDarkTheme = isDarkTheme,
-                        toggleTheme = { isDark -> isDarkTheme = isDark },
+                        toggleTheme = { isDark -> isDarkTheme.value = isDark },
                     )
                 }
             }

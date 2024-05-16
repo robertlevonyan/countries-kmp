@@ -3,6 +3,7 @@
 package com.robertlevonyan.countrieskmp.ui.details
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,7 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Card
@@ -30,13 +34,13 @@ import com.robertlevonyan.countrieskmp.entity.Country
 import com.robertlevonyan.countrieskmp.ui.theme.FabPadding
 import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
 import com.robertlevonyan.countrieskmp.ui.theme.RoundedRectShape
+import com.robertlevonyan.countrieskmp.ui.util.isTablet
 import countries_kmp.composeapp.generated.resources.Res
 import countries_kmp.composeapp.generated.resources.country_area
 import countries_kmp.composeapp.generated.resources.country_capital
 import countries_kmp.composeapp.generated.resources.country_currency
 import countries_kmp.composeapp.generated.resources.country_languages
 import countries_kmp.composeapp.generated.resources.country_population
-import countries_kmp.composeapp.generated.resources.country_postal_code
 import countries_kmp.composeapp.generated.resources.country_region
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -52,30 +56,13 @@ fun DetailsContent(
             .fillMaxSize()
     ) {
         item {
-            val pagerData = listOf(
-                country?.flags?.getOrElse("png") { "" },
-                country?.coatOfArms?.getOrElse("png") { "" },
-            )
             Card(
                 modifier = Modifier
                     .padding(FabPadding)
                     .fillMaxWidth(),
                 shape = RoundedRectShape,
             ) {
-                HorizontalPager(
-                    state = rememberPagerState { pagerData.size },
-                ) {
-                    AsyncImage(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                            .clip(RoundedRectShape),
-                        contentDescription = null,
-                        contentScale = ContentScale.FillHeight,
-                        model = pagerData[it],
-                        clipToBounds = true,
-                    )
-                }
+                DetailsHeader(country = country)
             }
         }
         item {
@@ -163,6 +150,51 @@ fun DetailsContent(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun DetailsHeader(country: Country?) {
+    if (country == null) return
+    val headerData = listOf(
+        country.flags?.getOrElse("png") { "" },
+        country.coatOfArms?.getOrElse("png") { "" },
+    )
+
+    if (isTablet()) {
+        Box(modifier = Modifier.fillMaxWidth()) {
+            LazyRow(modifier = Modifier.align(Alignment.Center)) {
+                items(headerData) {
+                    AsyncImage(
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .height(200.dp)
+                            .clip(RoundedRectShape)
+                            .padding(HalfPadding),
+                        contentDescription = null,
+                        contentScale = ContentScale.FillHeight,
+                        model = it,
+                        clipToBounds = true,
+                    )
+                }
+            }
+        }
+    } else {
+        HorizontalPager(
+            state = rememberPagerState { headerData.size },
+        ) {
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .clip(RoundedRectShape)
+                    .padding(HalfPadding),
+                contentDescription = null,
+                contentScale = ContentScale.FillHeight,
+                model = headerData[it],
+                clipToBounds = true,
+            )
         }
     }
 }

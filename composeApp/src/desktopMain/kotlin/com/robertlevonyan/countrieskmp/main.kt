@@ -16,7 +16,7 @@ import org.jetbrains.compose.resources.stringResource
 
 fun main() = application {
     val state = rememberWindowState(
-        size = DpSize(400.dp, 800.dp),
+        size = DpSize(1200.dp, 800.dp),
     )
 
     Window(

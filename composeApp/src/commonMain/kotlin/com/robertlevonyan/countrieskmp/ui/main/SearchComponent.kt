@@ -19,8 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
-import com.robertlevonyan.countrieskmp.ui.theme.PurpleGrey40
-import com.robertlevonyan.countrieskmp.ui.theme.PurpleGrey80
 import countries_kmp.composeapp.generated.resources.Res
 import countries_kmp.composeapp.generated.resources.ic_close
 import countries_kmp.composeapp.generated.resources.ic_search
@@ -31,7 +29,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SearchComponent(
-    isDarkTheme: Boolean,
+    backgroundColor: Color,
     onSearchInputChange: (String) -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
@@ -62,9 +60,7 @@ fun SearchComponent(
                     }
                 }
             },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = if (isDarkTheme) PurpleGrey40 else PurpleGrey80,
-            )
+            colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = backgroundColor)
         )
     }
 }

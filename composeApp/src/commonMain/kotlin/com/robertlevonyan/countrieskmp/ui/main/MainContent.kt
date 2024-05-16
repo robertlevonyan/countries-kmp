@@ -70,28 +70,54 @@ fun MainContent(
     val countries by viewModel.countries.collectAsState()
 
     AnimatedVisibility(
-        visible = countries.isEmpty(),
+        visible = countries == null,
         enter = fadeIn(),
         exit = fadeOut(),
     ) {
         LoadingContent()
     }
+
     AnimatedVisibility(
-        visible = countries.isNotEmpty(),
+        visible = countries?.isEmpty() == true,
+        enter = fadeIn(),
+        exit = fadeOut(),
+    ) {
+        EmptyContent()
+    }
+
+    AnimatedVisibility(
+        visible = countries?.isNotEmpty() == true,
         enter = fadeIn(),
         exit = fadeOut(),
     ) {
         val searchBackgroundColor = if (isDarkTheme) PurpleGrey40 else PurpleGrey80
+
         if (isTablet()) {
-            CountriesGridContent(paddingValues, searchBackgroundColor, countries) { country ->
-                val countryJson = json.encodeToString(Country.serializer(), country)
-                navigator.navigate(route = "${NavigationScreens.Details.name}?$ARG_COUNTRY=$countryJson")
-            }
+            CountriesGridContent(
+                paddingValues = paddingValues,
+                searchBackgroundColor = searchBackgroundColor,
+                countries = countries.orEmpty(),
+                onCountryClick = { country ->
+                    val countryJson = json.encodeToString(Country.serializer(), country)
+                    navigator.navigate(route = "${NavigationScreens.Details.name}?$ARG_COUNTRY=$countryJson")
+                },
+                onSearchInputChange = { changedSearchText ->
+                    viewModel.search(changedSearchText)
+                },
+            )
         } else {
-            CountriesListContent(paddingValues, searchBackgroundColor, countries) { country ->
-                val countryJson = json.encodeToString(Country.serializer(), country)
-                navigator.navigate(route = "${NavigationScreens.Details.name}?$ARG_COUNTRY=$countryJson")
-            }
+            CountriesListContent(
+                paddingValues = paddingValues,
+                searchBackgroundColor = searchBackgroundColor,
+                countries = countries.orEmpty(),
+                onCountryClick = { country ->
+                    val countryJson = json.encodeToString(Country.serializer(), country)
+                    navigator.navigate(route = "${NavigationScreens.Details.name}?$ARG_COUNTRY=$countryJson")
+                },
+                onSearchInputChange = { changedSearchText ->
+                    viewModel.search(changedSearchText)
+                },
+            )
         }
     }
 }
@@ -110,18 +136,20 @@ private fun LoadingContent() {
 }
 
 @Composable
+private fun EmptyContent() {
+
+}
+
+@Composable
 private fun CountriesGridContent(
     paddingValues: PaddingValues,
     searchBackgroundColor: Color,
     countries: Map<String, List<Country>>,
     onCountryClick: (Country) -> Unit,
+    onSearchInputChange: (String) -> Unit,
 ) {
-    var searchText by remember { mutableStateOf("") }
-
     Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-        SearchComponent(searchBackgroundColor) { changedSearchText ->
-            searchText = changedSearchText
-        }
+        SearchComponent(searchBackgroundColor, onSearchInputChange)
 
         LazyVerticalGrid(columns = GridCells.Adaptive(200.dp)) {
             countries.forEach { (letter, countries) ->
@@ -189,14 +217,11 @@ private fun CountriesListContent(
     searchBackgroundColor: Color,
     countries: Map<String, List<Country>>,
     onCountryClick: (Country) -> Unit,
+    onSearchInputChange: (String) -> Unit,
 ) {
-    var searchText by remember { mutableStateOf("") }
-
     LazyColumn(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
         item {
-            SearchComponent(searchBackgroundColor) { changedSearchText ->
-                searchText = changedSearchText
-            }
+            SearchComponent(searchBackgroundColor, onSearchInputChange)
         }
         countries.forEach { (letter, countries) ->
             stickyHeader {

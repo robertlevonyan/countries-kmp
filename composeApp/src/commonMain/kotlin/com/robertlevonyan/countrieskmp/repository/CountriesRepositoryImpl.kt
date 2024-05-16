@@ -15,7 +15,7 @@ class CountriesRepositoryImpl(
     private val httpClient: HttpClient,
     private val json: Json,
 ) : CountriesRepository {
-    override suspend fun getCountries(): Map<String, List<Country>> = try {
+    override suspend fun getCountries(input: String): Map<String, List<Country>> = try {
         val httpResponse = httpClient.get {
             url {
                 protocol = URLProtocol.HTTPS
@@ -31,6 +31,7 @@ class CountriesRepositoryImpl(
         countries
             .asSequence()
             .sortedBy { it.name?.common }
+            .filter { it.name?.common?.contains(input) == true }
             .groupBy { it.name?.common?.first().toString() }
     } catch (e: Exception) {
         emptyMap()

@@ -10,11 +10,17 @@ import moe.tlaster.precompose.viewmodel.viewModelScope
 class MainViewModel(
     private val countriesRepository: CountriesRepository
 ) : ViewModel() {
-    val countries = MutableStateFlow(emptyMap<String, List<Country>>())
+    val countries = MutableStateFlow<Map<String, List<Country>>?>(null)
 
     init {
         viewModelScope.launch {
             countries.value = countriesRepository.getCountries()
+        }
+    }
+
+    fun search(searchText: String) {
+        viewModelScope.launch {
+            countries.value = countriesRepository.getCountries(searchText)
         }
     }
 }

@@ -17,29 +17,24 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.robertlevonyan.countrieskmp.entity.Country
+import com.robertlevon.countrieskmp.Country
 import com.robertlevonyan.countrieskmp.ui.ARG_COUNTRY
 import com.robertlevonyan.countrieskmp.ui.NavigationScreens
 import com.robertlevonyan.countrieskmp.ui.lottie.lottieLoadingAnimation
@@ -54,20 +49,18 @@ import io.github.alexzhirkevich.compottie.LottieAnimation
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.LottieConstants
 import io.github.alexzhirkevich.compottie.rememberLottieComposition
-import kotlinx.serialization.json.Json
 import moe.tlaster.precompose.koin.koinViewModel
 import moe.tlaster.precompose.navigation.Navigator
-import org.koin.compose.koinInject
 
 @Composable
 fun MainContent(
     paddingValues: PaddingValues,
     isDarkTheme: Boolean,
     navigator: Navigator,
-    json: Json = koinInject(),
 ) {
     val viewModel = koinViewModel(vmClass = MainViewModel::class)
     val countries by viewModel.countries.collectAsState()
+    viewModel.search()
 
     AnimatedVisibility(
         visible = countries == null,
@@ -91,33 +84,54 @@ fun MainContent(
         exit = fadeOut(),
     ) {
         val searchBackgroundColor = if (isDarkTheme) PurpleGrey40 else PurpleGrey80
+        val isTablet = isTablet()
 
-        if (isTablet()) {
-            CountriesGridContent(
-                paddingValues = paddingValues,
-                searchBackgroundColor = searchBackgroundColor,
-                countries = countries.orEmpty(),
-                onCountryClick = { country ->
-                    val countryJson = json.encodeToString(Country.serializer(), country)
-                    navigator.navigate(route = "${NavigationScreens.Details.name}?$ARG_COUNTRY=$countryJson")
-                },
-                onSearchInputChange = { changedSearchText ->
-                    viewModel.search(changedSearchText)
-                },
-            )
-        } else {
-            CountriesListContent(
-                paddingValues = paddingValues,
-                searchBackgroundColor = searchBackgroundColor,
-                countries = countries.orEmpty(),
-                onCountryClick = { country ->
-                    val countryJson = json.encodeToString(Country.serializer(), country)
-                    navigator.navigate(route = "${NavigationScreens.Details.name}?$ARG_COUNTRY=$countryJson")
-                },
-                onSearchInputChange = { changedSearchText ->
-                    viewModel.search(changedSearchText)
-                },
-            )
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(200.dp),
+            contentPadding = paddingValues,
+        ) {
+            header {
+                SearchComponent(
+                    backgroundColor = searchBackgroundColor,
+                    onSearchInputChange = { changedSearchText ->
+                        viewModel.search(changedSearchText)
+                    },
+                )
+            }
+            countries?.forEach { (letter, countries) ->
+                header {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colors.background)
+                            .padding(HalfPadding)
+                    ) {
+                        Text(
+                            text = letter,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+                if (isTablet) {
+                    items(countries) {
+                        CountryGridItem(
+                            country = it,
+                            onCountryClick = { country ->
+                                navigator.navigate(route = "${NavigationScreens.Details.name}?$ARG_COUNTRY=${country.cca2}")
+                            },
+                        )
+                    }
+                } else {
+                    items(span = { GridItemSpan(this.maxLineSpan) }, items = countries) {
+                        CountryListItem(
+                            country = it,
+                            onCountryClick = { country ->
+                                navigator.navigate(route = "${NavigationScreens.Details.name}?$ARG_COUNTRY=${country.cca2}")
+                            },
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -141,40 +155,6 @@ private fun EmptyContent() {
 }
 
 @Composable
-private fun CountriesGridContent(
-    paddingValues: PaddingValues,
-    searchBackgroundColor: Color,
-    countries: Map<String, List<Country>>,
-    onCountryClick: (Country) -> Unit,
-    onSearchInputChange: (String) -> Unit,
-) {
-    Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-        SearchComponent(searchBackgroundColor, onSearchInputChange)
-
-        LazyVerticalGrid(columns = GridCells.Adaptive(200.dp)) {
-            countries.forEach { (letter, countries) ->
-                header {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colors.background)
-                            .padding(HalfPadding)
-                    ) {
-                        Text(
-                            text = letter,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    }
-                }
-                items(countries) { country: Country ->
-                    CountryGridItem(country, onCountryClick)
-                }
-            }
-        }
-    }
-}
-
-@Composable
 private fun CountryGridItem(
     country: Country,
     onCountryClick: (Country) -> Unit,
@@ -194,53 +174,20 @@ private fun CountryGridItem(
                 .align(Alignment.CenterHorizontally),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            model = country.flags?.getOrElse("png") { "" },
+            model = country.countryFlag,
             clipToBounds = true,
         )
         Text(
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            text = country.name?.common.orEmpty(),
+            text = country.commonName.orEmpty(),
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
         )
         Text(
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            text = country.capital?.firstOrNull().orEmpty(),
+            text = country.capital.orEmpty(),
             textAlign = TextAlign.Center,
         )
-    }
-}
-
-@Composable
-private fun CountriesListContent(
-    paddingValues: PaddingValues,
-    searchBackgroundColor: Color,
-    countries: Map<String, List<Country>>,
-    onCountryClick: (Country) -> Unit,
-    onSearchInputChange: (String) -> Unit,
-) {
-    LazyColumn(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
-        item {
-            SearchComponent(searchBackgroundColor, onSearchInputChange)
-        }
-        countries.forEach { (letter, countries) ->
-            stickyHeader {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colors.background)
-                        .padding(HalfPadding)
-                ) {
-                    Text(
-                        text = letter,
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
-            }
-            items(countries) { country: Country ->
-                CountryListItem(country, onCountryClick)
-            }
-        }
     }
 }
 
@@ -264,7 +211,7 @@ private fun CountryListItem(
                 .align(Alignment.CenterVertically),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            model = country.flags?.getOrElse("png") { "" },
+            model = country.countryFlag,
             clipToBounds = true,
         )
         Column(
@@ -274,10 +221,10 @@ private fun CountryListItem(
                 .align(Alignment.CenterVertically)
         ) {
             Text(
-                text = country.name?.common.orEmpty(),
+                text = country.commonName.orEmpty(),
                 fontWeight = FontWeight.Bold,
             )
-            Text(text = country.capital?.firstOrNull().orEmpty())
+            Text(text = country.capital.orEmpty())
         }
     }
 }

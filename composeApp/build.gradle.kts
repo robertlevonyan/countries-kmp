@@ -1,12 +1,15 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.sqldelight)
+    alias(libs.plugins.skie)
 }
 
 kotlin {
@@ -44,7 +47,8 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
-            isStatic = true
+            isStatic = false
+            linkerOpts.add("-lsqlite3")
         }
     }
 
@@ -58,6 +62,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.loggingjvm)
             implementation(libs.koin.android)
+            implementation(libs.sqldelight.driver.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -86,16 +91,34 @@ kotlin {
             implementation(libs.koin.test)
             implementation(libs.stately.common)
             implementation(libs.stately.concurrent.collections)
+            implementation(libs.sqldelight.coroutines.extensions)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.ktor.client.loggingjvm)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.sqldelight.driver.jvm)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.sqldelight.driver.native)
         }
     }
+
+    targets.configureEach {
+        compilations.configureEach {
+            compilerOptions.configure {
+                freeCompilerArgs.add("-Xexpect-actual-classes")
+            }
+        }
+    }
+
+//    project.extensions.findByType(KotlinMultiplatformExtension::class.java)?.apply {
+//        targets
+//            .filterIsInstance<KotlinNativeTarget>()
+//            .flatMap { it.binaries }
+//            .forEach { compilationUnit -> compilationUnit.linkerOpts("-lsqlite3") }
+//    }
 }
 
 android {
@@ -149,3 +172,12 @@ compose.desktop {
 //}
 
 task("testClasses")
+
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName.set("com.robertlevon.countrieskmp")
+            generateAsync.set(true)
+        }
+    }
+}

@@ -36,12 +36,13 @@ fun Navigation(
         }
 
         scene(route = NavigationScreens.Details.name) { backStackEntry ->
-            val countryJson = backStackEntry.query<String>(ARG_COUNTRY).orEmpty().ifEmpty {
-                backStackEntry.path.replace("${NavigationScreens.Details.name}?$ARG_COUNTRY=", "")
-            }
-            val country = json.decodeFromString(Country.serializer(), countryJson)
+            val cca2 = backStackEntry.query<String>(ARG_COUNTRY).orEmpty()
+//            val countryJson = backStackEntry.query<String>(ARG_COUNTRY).orEmpty().ifEmpty {
+//                backStackEntry.path.replace("${NavigationScreens.Details.name}?$ARG_COUNTRY=", "")
+//            }
+//            val country = json.decodeFromString(Country.serializer(), countryJson)
             DetailsScreen(
-                country = country,
+                cca2 = cca2,
                 navigator = navigator,
             )
         }

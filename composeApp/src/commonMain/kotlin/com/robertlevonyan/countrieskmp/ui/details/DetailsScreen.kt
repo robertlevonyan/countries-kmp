@@ -10,26 +10,31 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.robertlevonyan.countrieskmp.entity.Country
 import com.robertlevonyan.countrieskmp.ui.theme.DoublePadding
 import countries_kmp.composeapp.generated.resources.Res
 import countries_kmp.composeapp.generated.resources.ic_close
+import moe.tlaster.precompose.koin.koinViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun DetailsScreen(
-    country: Country?,
+    cca2: String,
     navigator: Navigator,
 ) {
+    val viewModel = koinViewModel(vmClass = DetailsViewModel::class)
+    viewModel.getCountry(cca2)
+    val country by viewModel.currentCountry.collectAsState()
 
     Scaffold(
         modifier = Modifier,
         topBar = {
-            Toolbar(countryName = "${country?.flag.orEmpty()} ${country?.name?.official.orEmpty()}") {
+            Toolbar(countryName = "${country?.flag.orEmpty()} ${country?.officialName.orEmpty()}") {
                 navigator.popBackStack()
             }
         },

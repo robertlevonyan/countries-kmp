@@ -30,7 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.robertlevonyan.countrieskmp.entity.Country
+import com.robertlevon.countrieskmp.Country
 import com.robertlevonyan.countrieskmp.ui.theme.FabPadding
 import com.robertlevonyan.countrieskmp.ui.theme.HalfPadding
 import com.robertlevonyan.countrieskmp.ui.theme.RoundedRectShape
@@ -49,7 +49,7 @@ import org.jetbrains.compose.resources.stringResource
 fun DetailsContent(
     paddingValues: PaddingValues,
     country: Country?,
-) {
+) = country?.run {
     LazyColumn(
         modifier = Modifier
             .padding(paddingValues)
@@ -62,7 +62,7 @@ fun DetailsContent(
                     .fillMaxWidth(),
                 shape = RoundedRectShape,
             ) {
-                DetailsHeader(country = country)
+                DetailsHeader(country = this@run)
             }
         }
         item {
@@ -77,19 +77,19 @@ fun DetailsContent(
                         .fillMaxWidth()
                         .padding(FabPadding)
                 ) {
-                    country?.population?.let { population ->
+                    population?.let { population ->
                         DetailItem(
                             title = stringResource(Res.string.country_population),
                             value = population.toString(),
                         )
                     }
-                    country?.region?.let { region ->
+                    region?.let { region ->
                         DetailItem(
                             title = stringResource(Res.string.country_region),
                             value = region,
                         )
                     }
-                    country?.capital?.firstOrNull()?.let { capital ->
+                    capital?.let { capital ->
                         DetailItem(
                             title = stringResource(Res.string.country_capital),
                             value = capital,
@@ -111,41 +111,38 @@ fun DetailsContent(
                         .fillMaxWidth()
                         .padding(FabPadding)
                 ) {
-                    country?.area?.let { area ->
+                    area?.let { area ->
                         DetailItem(
                             title = stringResource(Res.string.country_area),
                             value = "$area km²",
                         )
                     }
-                    country?.currencies?.let { currencies ->
-                        val formattedCurrencies = currencies.values.map { currency ->
-                            "${currency.name} ${currency.symbol}"
-                        }
+                    currencies?.let { currencies ->
                         DetailItem(
                             title = stringResource(Res.string.country_currency),
-                            value = formattedCurrencies.joinToString(", "),
+                            value = currencies,
                         )
                     }
                 }
             }
         }
-        item { Spacer(modifier = Modifier.size(HalfPadding)) }
-        item {
-            Card(
-                modifier = Modifier
-                    .padding(FabPadding)
-                    .fillMaxWidth(),
-                shape = RoundedRectShape,
-            ) {
-                Column(
+        languages?.let { languages ->
+            item { Spacer(modifier = Modifier.size(HalfPadding)) }
+            item {
+                Card(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .padding(FabPadding)
+                        .fillMaxWidth(),
+                    shape = RoundedRectShape,
                 ) {
-                    country?.languages?.let { languages ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(FabPadding)
+                    ) {
                         DetailItem(
                             title = stringResource(Res.string.country_languages),
-                            value = languages.values.joinToString(", "),
+                            value = languages,
                         )
                     }
                 }
@@ -157,10 +154,7 @@ fun DetailsContent(
 @Composable
 private fun DetailsHeader(country: Country?) {
     if (country == null) return
-    val headerData = listOf(
-        country.flags?.getOrElse("png") { "" },
-        country.coatOfArms?.getOrElse("png") { "" },
-    )
+    val headerData = listOf(country.countryFlag, country.coatOfArms)
 
     if (isTablet()) {
         Box(modifier = Modifier.fillMaxWidth()) {

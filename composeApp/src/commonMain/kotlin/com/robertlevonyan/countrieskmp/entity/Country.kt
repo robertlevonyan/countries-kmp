@@ -11,6 +11,8 @@ data class Country(
     @SerialName("tld")
     @Contextual
     val topLevelDomain: List<String>? = null,
+    @SerialName("cca2")
+    val cca2: String? = null,
     @SerialName("ccn3")
     val cellularNetworkFactor: String? = null,
     @SerialName("status")

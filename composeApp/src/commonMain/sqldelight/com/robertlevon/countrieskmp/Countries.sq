@@ -1,0 +1,34 @@
+createTableIfNotExists:
+CREATE TABLE IF NOT EXISTS country(
+  cca2 TEXT PRIMARY KEY,
+  commonName TEXT,
+  officialName TEXT,
+  nativeName TEXT,
+  currencies TEXT,
+  capital TEXT,
+  region TEXT,
+  subregion TEXT,
+  languages TEXT,
+  area REAL,
+  flag TEXT,
+  population INTEGER,
+  countryFlag TEXT,
+  coatOfArms TEXT
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS country_index ON country(cca2);
+
+insertCountry:
+INSERT OR REPLACE INTO country
+VALUES ?;
+
+selectAllCountries:
+SELECT *
+FROM country
+-- WHERE commonName LIKE ('% '|| :name || ' %') OR officialName LIKE ('% ' || :name || ' %')
+ORDER BY commonName ASC;
+
+selectCountryById:
+SELECT *
+FROM country
+WHERE cca2 = ?;

@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS country(
   coatOfArms TEXT
 );
 
+createUniqueIndexIfNotExists:
 CREATE UNIQUE INDEX IF NOT EXISTS country_index ON country(cca2);
 
 insertCountry:

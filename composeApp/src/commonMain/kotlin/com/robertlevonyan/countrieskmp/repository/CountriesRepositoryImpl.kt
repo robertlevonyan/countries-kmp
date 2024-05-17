@@ -29,6 +29,7 @@ class CountriesRepositoryImpl(
 ) : CountriesRepository {
     override suspend fun getCountries(input: String): Flow<Map<String, List<Country>>> = try {
         countriesQueries.createTableIfNotExists()
+        countriesQueries.createUniqueIndexIfNotExists()
         countriesQueries.selectAllCountries().asFlow().map {
             it.executeAsList()
         }.onEach { countries ->

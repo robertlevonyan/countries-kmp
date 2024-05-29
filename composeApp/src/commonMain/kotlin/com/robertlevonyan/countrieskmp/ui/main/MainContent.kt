@@ -1,4 +1,7 @@
-@file:OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
+@file:OptIn(
+    ExperimentalLayoutApi::class, ExperimentalMaterialApi::class,
+    ExperimentalResourceApi::class
+)
 
 package com.robertlevonyan.countrieskmp.ui.main
 
@@ -26,6 +29,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FilterChip
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -56,12 +60,18 @@ import com.robertlevonyan.countrieskmp.ui.theme.RoundedRectShape
 import com.robertlevonyan.countrieskmp.ui.theme.ThumbSize
 import com.robertlevonyan.countrieskmp.ui.util.header
 import com.robertlevonyan.countrieskmp.ui.util.isTablet
+import countries_kmp.composeapp.generated.resources.Res
+import countries_kmp.composeapp.generated.resources.ic_africa
+import countries_kmp.composeapp.generated.resources.ic_launcher
 import io.github.alexzhirkevich.compottie.LottieAnimation
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.LottieConstants
 import io.github.alexzhirkevich.compottie.rememberLottieComposition
 import moe.tlaster.precompose.koin.koinViewModel
 import moe.tlaster.precompose.navigation.Navigator
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun MainContent(
@@ -114,6 +124,14 @@ fun MainContent(
                                 onClick = { selectedRegion = region },
                                 content = {
                                     Text(region)
+                                },
+                                leadingIcon = {
+                                    if (region != REGION_ALL) {
+                                        Icon(
+                                            painter = painterResource(DrawableResource("drawable/ic-${region.lowercase()}.xml")),
+                                            contentDescription = null
+                                        )
+                                    }
                                 }
                             )
                         }

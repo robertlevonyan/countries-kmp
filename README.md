@@ -36,12 +36,15 @@ alphabetical order
   you need this entry point for your iOS app. This is also where you should add SwiftUI code for
   your project.
 
+### Preconditions
+> **_NOTE:_** To be able to run the iOS version make sure to have the latest iOS Simulator
+
 ### Learning
 
 Learn more
 about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
 [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
+[Kotlin/Wasm](https://kotl.in/wasm/)
 
 ### Plans for future
 

@@ -13,17 +13,25 @@ class MainViewModel(
     private val countriesRepository: CountriesRepository
 ) : ViewModel() {
     val countries = MutableStateFlow<Map<String, List<Country>>?>(null)
+    val regions = MutableStateFlow<List<String>>(emptyList())
 
     init {
         search()
+        viewModelScope.launch {
+            regions.value = countriesRepository.getRegions()
+        }
     }
 
-    fun search(searchText: String = "") {
-        println("Searching for $searchText")
+    fun search(
+        searchText: String = "",
+        region: String = "",
+    ) {
         viewModelScope.launch {
-            countriesRepository.getCountries(searchText).onEach {
+            countriesRepository.getCountries(searchText, region).onEach {
                 countries.value = it
             }.launchIn(viewModelScope)
         }
     }
+
+
 }

@@ -27,11 +27,14 @@ class CountriesRepositoryImpl(
     private val json: Json,
     private val countriesQueries: CountriesQueries,
 ) : CountriesRepository {
-    override suspend fun getCountries(input: String): Flow<Map<String, List<Country>>> = try {
+    override suspend fun getCountries(
+        input: String,
+        region: String,
+    ): Flow<Map<String, List<Country>>> = try {
         countriesQueries.createTableIfNotExists()
         countriesQueries.createUniqueIndexIfNotExists()
         countriesQueries.selectAllCountries().asFlow()
-            .map { it.executeAsList() }
+            .map { query -> query.executeAsList() }
             .onEach { countries ->
                 countries.ifEmpty {
                     val httpResponse = httpClient.get {
@@ -78,15 +81,35 @@ class CountriesRepositoryImpl(
                 }
             }
             .map { allCountries ->
-                allCountries
-                    .filter { it.commonName?.contains(input, true) == true }
-                    .groupBy { it.commonName?.first().toString() }
+                allCountries.filter { country ->
+                    country.commonName?.contains(
+                        other = input,
+                        ignoreCase = true,
+                    ) == true && country.region?.contains(
+                        other = if (region == REGION_ALL) "" else region,
+                        ignoreCase = true,
+                    ) == true
+                }.groupBy { country -> country.commonName?.first().toString() }
             }
     } catch (e: Exception) {
         emptyFlow()
     }.flowOn(Dispatchers.IO)
 
+    override suspend fun getRegions(): List<String> = withContext(Dispatchers.IO) {
+        buildList {
+            add(REGION_ALL)
+            addAll(
+                countriesQueries.selectAllCountries().executeAsList()
+                    .groupBy { it.region }.keys.toList().filterNotNull()
+            )
+        }
+    }
+
     override suspend fun getCountry(cca2: String): Country? = withContext(Dispatchers.IO) {
         countriesQueries.selectCountryById(cca2).executeAsOneOrNull()
+    }
+
+    companion object {
+        const val REGION_ALL = "All"
     }
 }

@@ -30,54 +30,58 @@ class CountriesRepositoryImpl(
     override suspend fun getCountries(input: String): Flow<Map<String, List<Country>>> = try {
         countriesQueries.createTableIfNotExists()
         countriesQueries.createUniqueIndexIfNotExists()
-        countriesQueries.selectAllCountries().asFlow().map {
-            it.executeAsList()
-        }.onEach { countries ->
-            countries.ifEmpty {
-                val httpResponse = httpClient.get {
-                    url {
-                        protocol = URLProtocol.HTTPS
-                        host = "restcountries.com"
-                        path("v3.1", "all")
-                        contentType(ContentType.Application.Json)
+        countriesQueries.selectAllCountries().asFlow()
+            .map { it.executeAsList() }
+            .onEach { countries ->
+                countries.ifEmpty {
+                    val httpResponse = httpClient.get {
+                        url {
+                            protocol = URLProtocol.HTTPS
+                            host = "restcountries.com"
+                            path("v3.1", "all")
+                            contentType(ContentType.Application.Json)
+                        }
                     }
-                }
-                val remoteCountries = httpResponse.body<String?>()?.let { jsonString ->
-                    json.decodeFromString(
-                        ListSerializer(RemoteCountry.serializer()),
-                        jsonString
-                    )
-                } ?: emptyList()
-                val localCountries = remoteCountries.map { remoteCountry ->
-                    Country(
-                        commonName = remoteCountry.name?.common,
-                        officialName = remoteCountry.name?.official,
-                        nativeName = "",
-                        currencies = remoteCountry.currencies?.values?.joinToString(", ") { currency ->
-                            "${currency.name} ${currency.symbol}"
-                        },
-                        capital = remoteCountry.capital?.firstOrNull(),
-                        region = remoteCountry.region,
-                        subregion = remoteCountry.subregion,
-                        languages = remoteCountry.languages?.values?.joinToString(", "),
-                        area = remoteCountry.area,
-                        flag = remoteCountry.flag,
-                        population = remoteCountry.population,
-                        countryFlag = remoteCountry.flags?.getOrElse("png") { "" },
-                        coatOfArms = remoteCountry.coatOfArms?.getOrElse("png") { "" },
-                        cca2 = remoteCountry.cca2.orEmpty(),
-                    )
-                }
+                    val remoteCountries = httpResponse.body<String?>()?.let { jsonString ->
+                        json.decodeFromString(
+                            ListSerializer(RemoteCountry.serializer()),
+                            jsonString
+                        )
+                    } ?: emptyList()
+                    val localCountries = remoteCountries.map { remoteCountry ->
+                        Country(
+                            commonName = remoteCountry.name?.common,
+                            officialName = remoteCountry.name?.official,
+                            nativeName = "",
+                            currencies = remoteCountry.currencies?.values?.joinToString(", ") { currency ->
+                                "${currency.name} ${currency.symbol}"
+                            },
+                            capital = remoteCountry.capital?.firstOrNull(),
+                            region = remoteCountry.region,
+                            subregion = remoteCountry.subregion,
+                            languages = remoteCountry.languages?.values?.joinToString(", "),
+                            area = remoteCountry.area,
+                            flag = remoteCountry.flag,
+                            population = remoteCountry.population,
+                            countryFlag = remoteCountry.flags?.getOrElse("png") { "" },
+                            coatOfArms = remoteCountry.coatOfArms?.getOrElse("png") { "" },
+                            cca2 = remoteCountry.cca2.orEmpty(),
+                        )
+                    }
 
-                countriesQueries.transaction {
-                    localCountries.forEach { localCountry ->
-                        countriesQueries.insertCountry(localCountry)
+                    countriesQueries.transaction {
+                        localCountries.forEach { localCountry ->
+                            countriesQueries.insertCountry(localCountry)
+                        }
                     }
+                    localCountries
                 }
             }
-        }.map { allCountries ->
-            allCountries.groupBy { it.commonName?.first().toString() }
-        }
+            .map { allCountries ->
+                allCountries
+                    .filter { it.commonName?.contains(input, true) == true }
+                    .groupBy { it.commonName?.first().toString() }
+            }
     } catch (e: Exception) {
         emptyFlow()
     }.flowOn(Dispatchers.IO)

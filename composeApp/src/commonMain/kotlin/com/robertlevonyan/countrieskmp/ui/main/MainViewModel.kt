@@ -14,7 +14,12 @@ class MainViewModel(
 ) : ViewModel() {
     val countries = MutableStateFlow<Map<String, List<Country>>?>(null)
 
+    init {
+        search()
+    }
+
     fun search(searchText: String = "") {
+        println("Searching for $searchText")
         viewModelScope.launch {
             countriesRepository.getCountries(searchText).onEach {
                 countries.value = it

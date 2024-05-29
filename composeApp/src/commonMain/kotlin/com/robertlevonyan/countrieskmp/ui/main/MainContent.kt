@@ -61,10 +61,9 @@ fun MainContent(
     paddingValues: PaddingValues,
     isDarkTheme: Boolean,
     navigator: Navigator,
+    viewModel: MainViewModel = koinViewModel(vmClass = MainViewModel::class)
 ) {
-    val viewModel = koinViewModel(vmClass = MainViewModel::class)
     val countries by viewModel.countries.collectAsState()
-    viewModel.search()
 
     AnimatedVisibility(
         visible = countries == null,

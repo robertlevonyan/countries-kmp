@@ -52,7 +52,10 @@ fun SearchComponent(
             },
             trailingIcon = {
                 if (searchText.isNotEmpty()) {
-                    IconButton(onClick = { searchText = "" }) {
+                    IconButton(onClick = {
+                        searchText = ""
+                        onSearchInputChange("")
+                    }) {
                         Icon(
                             painter = painterResource(Res.drawable.ic_close),
                             contentDescription = null,

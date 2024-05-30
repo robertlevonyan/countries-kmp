@@ -34,6 +34,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import org.jetbrains.compose.resources.ResourceItem
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -71,8 +72,11 @@ import moe.tlaster.precompose.koin.koinViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.InternalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.skia.Drawable
 
+@OptIn(InternalResourceApi::class)
 @Composable
 fun MainContent(
     paddingValues: PaddingValues,
@@ -128,7 +132,19 @@ fun MainContent(
                                 leadingIcon = {
                                     if (region != REGION_ALL) {
                                         Icon(
-                                            painter = painterResource(DrawableResource("drawable/ic-${region.lowercase()}.xml")),
+                                            painter = painterResource(
+                                                DrawableResource(
+                                                    "drawable:${region.lowercase()}",
+                                                    setOf(
+                                                        ResourceItem(
+                                                            setOf(),
+                                                            "composeResources/countries_kmp.composeapp.generated.resources/drawable/ic-${region.lowercase()}.xml",
+                                                            -1,
+                                                            -1
+                                                        ),
+                                                    )
+                                                ),
+                                            ),
                                             contentDescription = null
                                         )
                                     }

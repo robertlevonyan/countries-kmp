@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.sqldelight)
     alias(libs.plugins.skie)
-//    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {

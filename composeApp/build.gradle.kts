@@ -1,6 +1,11 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.js.translate.intrinsic.operation.binaryIntrinsic
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -32,14 +37,18 @@ kotlin {
 //    }
 
     androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "17"
-            }
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+            freeCompilerArgs.add("-Xexpect-actual-classes")
         }
     }
 
-    jvm("desktop")
+    jvm("desktop") {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+            freeCompilerArgs.add("-Xexpect-actual-classes")
+        }
+    }
 
     listOf(
         iosX64(),
@@ -106,19 +115,15 @@ kotlin {
         }
     }
 
-    targets.configureEach {
-        compilations.configureEach {
-            compilerOptions.configure {
-                freeCompilerArgs.add("-Xexpect-actual-classes")
-            }
-        }
-    }
-
 //    project.extensions.findByType(KotlinMultiplatformExtension::class.java)?.apply {
 //        targets
 //            .filterIsInstance<KotlinNativeTarget>()
 //            .flatMap { it.binaries }
 //            .forEach { compilationUnit -> compilationUnit.linkerOpts("-lsqlite3") }
+//    }
+
+//    macosArm64("desktop") {
+//        binaries { executable() }
 //    }
 }
 
@@ -164,6 +169,12 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
             packageName = "com.robertlevon.countrieskmp"
             packageVersion = "1.0.0"
+            macOS {
+                iconFile.set(File("../desktopIcon", "app-icon-1024.png"))
+                appStore = true
+                bundleID = "com.robertlevon.countrieskmp"
+            }
+            outputBaseDir.set(getLayout().buildDirectory.dir("outputs"))
         }
     }
 }

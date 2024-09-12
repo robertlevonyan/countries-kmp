@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalResourceApi::class)
-
 package com.robertlevonyan.countrieskmp.ui.details
 
 import androidx.compose.foundation.layout.fillMaxWidth

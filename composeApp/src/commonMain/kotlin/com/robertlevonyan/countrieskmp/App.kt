@@ -27,7 +27,7 @@ fun App(isAndroidApp: Boolean = false) {
 }
 
 @Composable
-fun AppContent() {
+private fun AppContent() {
     val isSystemInDarkTheme = isSystemInDarkTheme()
     val isDarkTheme = remember { mutableStateOf(isSystemInDarkTheme) }
 

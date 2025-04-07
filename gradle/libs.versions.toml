@@ -1,26 +1,25 @@
 [versions]
-agp = "8.6.0"
-android-compileSdk = "34"
+agp = "8.9.1"
+android-compileSdk = "35"
 android-minSdk = "24"
-android-targetSdk = "34"
-androidx-activityCompose = "1.9.2"
-compose = "1.7.1"
-compose-plugin = "1.6.11"
-koinCore = "3.6.0-wasm-alpha1"
+android-targetSdk = "35"
+androidx-activityCompose = "1.10.1"
+compose = "1.7.8"
+compose-plugin = "1.7.3"
+koinCore = "4.0.0"
 koinTest = "3.2.0"
-kotlin = "2.0.0"
+kotlin = "2.1.20"
 ktor = "2.3.10"
 material3WindowSizeClassMultiplatform = "0.5.0"
 precompose = "1.6.0"
-serialization = "1.7.2"
-coroutines = "1.8.1"
+serialization = "1.7.3"
+coroutines = "1.10.1"
 coil = "3.0.0-alpha06"
 lottie = "1.1.2"
 statelyCommon = "2.0.5"
-statelyConcurrentCollections = "2.0.6"
+statelyConcurrentCollections = "2.1.0"
 sqldelight = "2.0.2"
-ksp = "2.0.0-1.0.22"
-skie = "0.8.4"
+ksp = "2.1.20-1.0.32"
 
 [libraries]
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinCore" }
@@ -63,7 +62,6 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-skie = { id = "co.touchlab.skie", version.ref = "skie" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

@@ -3,9 +3,6 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import org.jetbrains.kotlin.js.translate.intrinsic.operation.binaryIntrinsic
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -14,28 +11,11 @@ plugins {
     alias(libs.plugins.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.sqldelight)
-    alias(libs.plugins.skie)
+//    alias(libs.plugins.skie)
     alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
-//    @OptIn(ExperimentalWasmDsl::class)
-//    wasmJs {
-//        moduleName = "composeApp"
-//        browser {
-//            commonWebpackConfig {
-//                outputFileName = "composeApp.js"
-//                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-//                    static = (static ?: mutableListOf()).apply {
-//                        // Serve sources to debug inside browser
-//                        add(project.projectDir.path)
-//                    }
-//                }
-//            }
-//        }
-//        binaries.executable()
-//    }
-
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
@@ -73,6 +53,7 @@ kotlin {
             implementation(libs.ktor.client.loggingjvm)
             implementation(libs.koin.android)
             implementation(libs.sqldelight.driver.android)
+            implementation("androidx.compose.ui:ui-test-junit4:1.7.8")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -86,7 +67,7 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.kotlin.test)
+//            implementation(libs.kotlin.test)
             implementation(libs.kotlin.serialization)
             implementation(libs.coil)
             implementation(libs.coil.compose)
@@ -114,17 +95,6 @@ kotlin {
             implementation(libs.sqldelight.driver.native)
         }
     }
-
-//    project.extensions.findByType(KotlinMultiplatformExtension::class.java)?.apply {
-//        targets
-//            .filterIsInstance<KotlinNativeTarget>()
-//            .flatMap { it.binaries }
-//            .forEach { compilationUnit -> compilationUnit.linkerOpts("-lsqlite3") }
-//    }
-
-//    macosArm64("desktop") {
-//        binaries { executable() }
-//    }
 }
 
 android {
@@ -179,11 +149,7 @@ compose.desktop {
     }
 }
 
-//compose.experimental {
-//    web.application {}
-//}
-
-task("testClasses")
+//task("testClasses")
 
 sqldelight {
     databases {

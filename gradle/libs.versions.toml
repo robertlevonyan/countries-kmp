@@ -1,10 +1,10 @@
 [versions]
-agp = "8.9.1"
+agp = "8.9.2"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
 androidx-activityCompose = "1.10.1"
-compose = "1.7.8"
+compose = "1.8.0"
 compose-plugin = "1.7.3"
 koinCore = "4.0.0"
 koinTest = "3.2.0"
@@ -12,21 +12,20 @@ kotlin = "2.1.20"
 ktor = "2.3.10"
 material3WindowSizeClassMultiplatform = "0.5.0"
 precompose = "1.6.0"
-serialization = "1.7.3"
-coroutines = "1.10.1"
+serialization = "1.8.1"
+coroutines = "1.10.2"
 coil = "3.0.0-alpha06"
 lottie = "1.1.2"
 statelyCommon = "2.0.5"
 statelyConcurrentCollections = "2.1.0"
 sqldelight = "2.0.2"
-ksp = "2.1.20-1.0.32"
+ksp = "2.1.20-2.0.0"
 
 [libraries]
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinCore" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinCore" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koinTest" }
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }

@@ -53,7 +53,6 @@ kotlin {
             implementation(libs.ktor.client.loggingjvm)
             implementation(libs.koin.android)
             implementation(libs.sqldelight.driver.android)
-            implementation("androidx.compose.ui:ui-test-junit4:1.7.8")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -67,7 +66,6 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.kotlinx.coroutines.core)
-//            implementation(libs.kotlin.test)
             implementation(libs.kotlin.serialization)
             implementation(libs.coil)
             implementation(libs.coil.compose)
